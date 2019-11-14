@@ -7,9 +7,8 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state= {
-                tasks :[
-                
-            ]
+            tasks :[],
+            isDisplayForm:false
         }
     }
     onGenerateData = () =>{
@@ -33,10 +32,31 @@ class App extends Component {
             })
         }
     }
+    onToggleForm = () =>{
+        this.setState({
+            isDisplayForm : !this.state.isDisplayForm
+        })
+    }
+    onCloseForm = () =>{
+        this.setState({
+            isDisplayForm : false
+        })
+    }
+    onSubmit = (data) =>{
+        //data chính là this.state truyền ở taskform
+        console.log(data);
+        var {tasks} = this.state;
+        tasks.push(data);
+        this.setState({
+            tasks:tasks
+        })
+        localStorage.setItem('tasks',JSON.stringify(tasks));
+    }
   
   render(){
-      //var tasks = this.state.tasks
-      var {tasks} = this.state
+    //var tasks = this.state.tasks
+    var {tasks ,isDisplayForm} = this.state;
+    var elmTaskForm = isDisplayForm ? <TaskForm onSubmit={this.onSubmit} onCloseForm={this.onCloseForm}/> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -44,15 +64,14 @@ class App extends Component {
             <hr/>
         </div>
         <div className="row">
-            <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <TaskForm/>
+            <div className={isDisplayForm ?'col-xs-4 col-sm-4 col-md-4 col-lg-4' :''}>
+                {elmTaskForm}
             </div>
-            <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                <button type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
+            <div className={isDisplayForm ?'col-xs-8 col-sm-8 col-md-8 col-lg-8' : 'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
+                <button onClick={this.onToggleForm} type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
                 <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button>
                   <Control/>
-   
-                <TaskList tasks={tasks}/>   
+                <TaskList tasks={tasks} />   
             </div>
         </div>
     </div>

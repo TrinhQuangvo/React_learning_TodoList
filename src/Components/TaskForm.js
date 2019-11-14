@@ -1,23 +1,52 @@
 import React, { Component } from 'react'
 
 export class TaskForm extends Component {
+    //dùng state để lưu trữ giá trị các coltrol 
+    constructor(props){
+        super(props)
+        this.state = {
+            name:'',
+            status:false
+        }
+    }
+    onCloseForm =()=>{
+        this.props.onCloseForm();
+    }
+
+    onSubmit =(event) =>{
+        event.preventDefault();
+        this.props.onSubmit(this.state);
+    }
+
+    onChange = (event) =>{
+        var target = event.target;
+        var name = target.name;
+        var value = target.value;
+        if(name === 'status')
+            value = target.value === 'true'? true : false;
+        this.setState({
+            [name] : value
+        })
+    }
     render() {
         return (
             <div>
                 <div className="panel panel-warning">
                     <div className="panel-heading">
-                        <h3 className="panel-title">Thêm Công Việc</h3>
+                        <h3 className="panel-title">Thêm Công Việc
+                            <button className='btn btn-danger ml-3' onClick={this.onCloseForm}>&times;</button>
+                        </h3>
                     </div>
                     <div className="panel-body">
-                        <form>
+                        <form onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <label>Tên :</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" name="name" onChange={this.onChange} value={this.state.name} className="form-control" />
                             </div>
                             <label>Trạng Thái :</label>
-                            <select className="form-control" required="required">
-                                <option value="1">Kích Hoạt</option>
-                                <option value="0">Ẩn</option>
+                            <select className="form-control" name="status" value={this.state.status} onChange={this.onChange} required="required">
+                                <option value={true}>Kích Hoạt</option>
+                                <option value={false}>Ẩn</option>
                             </select>
                             <br/>
                             <div className="text-center">
