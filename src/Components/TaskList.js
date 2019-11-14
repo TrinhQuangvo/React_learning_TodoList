@@ -3,6 +3,10 @@ import TaskItems from './TaskItems'
 
 export class TaskList extends Component {
     render() {
+        var {tasks} = this.props
+        var elementTasks = tasks.map((task ,index) => {
+            return <TaskItems key={task.id} index={index} task={task}/>
+        })
         return (
             <div>
                  <div className="row mt-15">
@@ -31,7 +35,7 @@ export class TaskList extends Component {
                                     </td>
                                     <td></td>
                                 </tr>
-                               <TaskItems/>
+                               {elementTasks}
                                </tbody>
                         </table>
                     </div>

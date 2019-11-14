@@ -3,17 +3,40 @@ import TaskForm from './Components/TaskForm';
 import Control from './Components/Control'
 import './App.css';
 import TaskList from './Components/TaskList';
-
 class App extends Component {
+    constructor(props){
+        super(props);
+        this.state= {
+                tasks :[
+                
+            ]
+        }
+    }
+    onGenerateData = () =>{
+        var tasks = [
+        {id:Math.random(),name:'take out the trash',status:false},
+        {id:Math.random(),name:'buy some milk',status:true},
+        {id:Math.random(),name:'loremmmmmt',status:true}
+    ];
+        this.setState({ 
+            tasks : tasks
+        });
+        //lưu trữ trong local storage   
+        localStorage.setItem('tasks',JSON.stringify(tasks))
+    }
+
+    componentDidMount(){
+        if(localStorage && localStorage.getItem('tasks')){
+            var tasks = JSON.parse(localStorage.getItem('tasks'));
+            this.setState({
+                tasks : tasks
+            })
+        }
+    }
   
-  state = {
-    todos: [
-      {id:Math.random(),title:'take out the trash',completed:false},
-      {id:Math.random(),title:'buy some milk',completed:false},
-      {id:Math.random(),title:'loremmmmmt',completed:true}
-    ]
-  }
   render(){
+      //var tasks = this.state.tasks
+      var {tasks} = this.state
     return (
       <div className="container">
         <div className="text-center">
@@ -25,13 +48,11 @@ class App extends Component {
                 <TaskForm/>
             </div>
             <div className="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                <button type="button" className="btn btn-primary">
-                    <span className="fa fa-plus"></span>Thêm Công Việc
-                </button>
-                <div className="row mt-15">
+                <button type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
+                <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button>
                   <Control/>
-                </div>
-                <TaskList/>   
+   
+                <TaskList tasks={tasks}/>   
             </div>
         </div>
     </div>

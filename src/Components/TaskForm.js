@@ -27,7 +27,6 @@ export class TaskForm extends Component {
                         </form>
                     </div>
                 </div>
-            
             </div>
         )
     }
