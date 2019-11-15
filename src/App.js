@@ -52,11 +52,32 @@ class App extends Component {
         })
         localStorage.setItem('tasks',JSON.stringify(tasks));
     }
+    onUpdateStatus = (id) =>{
+        var {tasks} = this.state
+        var index = this.findIndex(id);
+        if(index !== -1){
+            tasks[index].status = !tasks[index].status
+            this.setState({
+                tasks : tasks
+            });
+            localStorage.setItem('tasks',JSON.stringify(tasks))
+        }
+    }
+    findIndex = (id) =>{
+        var {tasks} = this.state;
+        var result = -1
+        tasks.forEach((task,index)=>{
+            if(task.id ===id){
+                result = index
+            }
+        });
+        return result
+    }
   
   render(){
     //var tasks = this.state.tasks
     var {tasks ,isDisplayForm} = this.state;
-    var elmTaskForm = isDisplayForm ? <TaskForm onSubmit={this.onSubmit} onCloseForm={this.onCloseForm}/> : '';
+    var elmTaskForm = isDisplayForm ? <TaskForm key={this.state.id} onSubmit={this.onSubmit} onCloseForm={this.onCloseForm}/> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -69,9 +90,9 @@ class App extends Component {
             </div>
             <div className={isDisplayForm ?'col-xs-8 col-sm-8 col-md-8 col-lg-8' : 'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
                 <button onClick={this.onToggleForm} type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
-                <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button>
+                {/* <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button> */}
                   <Control/>
-                <TaskList tasks={tasks} />   
+                <TaskList onUpdateStatus={this.onUpdateStatus} tasks={tasks} />   
             </div>
         </div>
     </div>
