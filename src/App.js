@@ -73,7 +73,18 @@ class App extends Component {
         });
         return result
     }
-  
+    onDeleteItem = (id) =>{
+        var {tasks} = this.state;
+        var index = this.findIndex(id);
+        if(index !== -1){
+            tasks.splice(index,1);
+            this.setState({
+                tasks : tasks
+            });
+            localStorage.setItem('tasks',JSON.stringify(tasks));
+            this.onCloseForm();
+        }
+    }
   render(){
     //var tasks = this.state.tasks
     var {tasks ,isDisplayForm} = this.state;
@@ -92,7 +103,10 @@ class App extends Component {
                 <button onClick={this.onToggleForm} type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
                 {/* <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button> */}
                   <Control/>
-                <TaskList onUpdateStatus={this.onUpdateStatus} tasks={tasks} />   
+                <TaskList 
+                onUpdateStatus={this.onUpdateStatus} 
+                tasks={tasks}
+                onDeleteItem = {this.onDeleteItem} />   
             </div>
         </div>
     </div>

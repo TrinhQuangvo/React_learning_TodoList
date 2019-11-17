@@ -5,7 +5,12 @@ export class TaskList extends Component {
     render() {
         var {tasks} = this.props
         var elementTasks = tasks.map((task ,index) => {
-            return <TaskItems onUpdateStatus={this.props.onUpdateStatus} key={index} index={index} task={task}/>
+            return <TaskItems 
+                    onUpdateStatus={this.props.onUpdateStatus} 
+                    key={index} index={index} 
+                    task={task}
+                    onDeleteItem = {this.props.onDeleteItem}
+                    />
         })
         return (
             <div>

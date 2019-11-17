@@ -4,6 +4,9 @@ export class TaskItems extends Component {
     onUpdateStatus =() =>{
         this.props.onUpdateStatus(this.props.task.id)
     }
+    onDeleteItem =() =>{
+        this.props.onDeleteItem(this.props.task.id);
+    }
     render() {
         var {task ,index} = this.props;
         return (
@@ -16,8 +19,8 @@ export class TaskItems extends Component {
                             <span className="fa fa-pencil"></span>Sửa
                         </button>
                         &nbsp;
-                        <button type="button" className="btn btn-danger">
-                            <span className="fa fa-trash"></span>Xóa
+                        <button  onClick={this.onDeleteItem} type="button" className="btn btn-danger">
+                            <span  className="fa fa-trash"></span>Xóa
                         </button>
                     </td>
                 </tr>
