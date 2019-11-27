@@ -8,15 +8,16 @@ class App extends Component {
         super(props);
         this.state= {
             tasks :[],
-            isDisplayForm:false
+            isDisplayForm:false,
+            taskEditing:null
         }
     }
     onGenerateData = () =>{
         var tasks = [
-        {id:Math.random(),name:'take out the trash',status:false},
-        {id:Math.random(),name:'buy some milk',status:true},
-        {id:Math.random(),name:'loremmmmmt',status:true}
-    ];
+            {id:Math.random(),name:'take out the trash',status:false},
+            {id:Math.random(),name:'buy some milk',status:true},
+            {id:Math.random(),name:'loremmmmmt',status:true}
+        ];
         this.setState({ 
             tasks : tasks
         });
@@ -39,17 +40,25 @@ class App extends Component {
     }
     onCloseForm = () =>{
         this.setState({
-            isDisplayForm : false
+            isDisplayForm : false,
         })
     }
     onSubmit = (data) =>{
         //data chính là this.state truyền ở taskform
         console.log(data);
         var {tasks} = this.state;
-        tasks.push(data);
+        if(data.id === ''){
+            /* nếu id rỗng tức là dữ liệu mới thêm vào ngược lại là edit */
+            data.id = Math.random();
+            tasks.push(data);
+        }else{
+            var index = this.findIndex(data.id);
+            tasks[index] = data
+        }
         this.setState({
-            tasks:tasks
-        })
+            tasks:tasks,
+            taskEditing : null
+        });
         localStorage.setItem('tasks',JSON.stringify(tasks));
     }
     onUpdateStatus = (id) =>{
@@ -85,10 +94,32 @@ class App extends Component {
             this.onCloseForm();
         }
     }
+    onShowForm = () =>{
+        this.setState({
+            isDisplayForm : true
+        })
+    }
+    onUpdate = (id) =>{
+        var {tasks} = this.state;
+        var index = this.findIndex(id);
+        let taskEditing = tasks[index]
+        //console.log(taskEditing)
+        this.setState({
+            //lấy task đang cập nhật
+            taskEditing : taskEditing
+        });
+        this.onShowForm();
+    }
   render(){
     //var tasks = this.state.tasks
-    var {tasks ,isDisplayForm} = this.state;
-    var elmTaskForm = isDisplayForm ? <TaskForm key={this.state.id} onSubmit={this.onSubmit} onCloseForm={this.onCloseForm}/> : '';
+    var {tasks ,isDisplayForm , taskEditing} = this.state;
+    var elmTaskForm = isDisplayForm ? 
+        <TaskForm 
+            key={this.state.id} 
+            task={taskEditing} 
+            onSubmit={this.onSubmit} 
+            onCloseForm={this.onCloseForm}
+        /> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -106,7 +137,8 @@ class App extends Component {
                 <TaskList 
                 onUpdateStatus={this.onUpdateStatus} 
                 tasks={tasks}
-                onDeleteItem = {this.onDeleteItem} />   
+                onDeleteItem = {this.onDeleteItem}
+                onUpdate = {this.onUpdate} />   
             </div>
         </div>
     </div>

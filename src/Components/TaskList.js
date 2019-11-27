@@ -10,6 +10,7 @@ export class TaskList extends Component {
                     key={index} index={index} 
                     task={task}
                     onDeleteItem = {this.props.onDeleteItem}
+                    onUpdate = {this.props.onUpdate}    
                     />
         })
         return (

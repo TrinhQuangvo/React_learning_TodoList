@@ -5,8 +5,31 @@ export class TaskForm extends Component {
     constructor(props){
         super(props)
         this.state = {
+            id:'',
             name:'',
             status:false
+        }
+    }
+    componentWillMount(){
+        if(this.props.task){
+            this.setState({
+                id:this.props.task.id,
+                name:this.props.task.name,
+                status:this.props.task.status
+            });
+            console.log(this.state)
+        }
+    }
+    //  khi một instance của component được update, 
+    //  componentWillReceiveProps sẽ được gọi trước khi render.
+    componentWillReceiveProps(nextProps){
+        if(nextProps.task && nextProps){
+            this.setState({
+                id:nextProps.task.id,
+                name:nextProps.task.name,
+                status:nextProps.task.status
+            });
+            console.log('nexprops' + this.state)
         }
     }
     onCloseForm =()=>{
@@ -38,11 +61,13 @@ export class TaskForm extends Component {
         })
     }
     render() {
+        var {id} = this.state;
         return (
             <div>
                 <div className="panel panel-warning">
                     <div className="panel-heading">
-                        <h3 className="panel-title">Thêm Công Việc
+                        <h3 className="panel-title">
+                            {id !== '' ? 'Sửa Công Việc' : 'Thêm Công Việc'}
                             <button className='btn btn-danger ml-3' onClick={this.onCloseForm}>&times;</button>
                         </h3>
                     </div>
