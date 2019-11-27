@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 
 export class Sort extends Component {
+    onClick = ( sortBy , sortValue ) =>{
+       this.setState({
+           sort:{
+               by:sortBy,value:sortValue
+           }
+       });
+    }
     render() {
         return (
             <div>
@@ -9,14 +16,14 @@ export class Sort extends Component {
                         Sắp Xếp <span className="fa fa-caret-square-o-down"></span>
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li>
+                        <li onClick={()=>this.onClick('name',1)}>
                             <a href='/' role="button">
                                         <span className="fa fa-sort-alpha-asc pr-5">
                                             Tên A-Z
                                         </span>
                             </a>
                         </li>
-                        <li>
+                        <li onClick={()=>this.onClick('name',-1)}>
                             <a href='/' role="button">
                                         <span className="fa fa-sort-alpha-desc pr-5">
                                             Tên Z-A
@@ -24,8 +31,8 @@ export class Sort extends Component {
                             </a>
                         </li>
                         <li role="separator" className="divider"></li>
-                        <li><a href='/' role="button">Trạng Thái Kích Hoạt</a></li>
-                        <li><a href='/' role="button">Trạng Thái Ẩn</a></li>
+                        <li  onClick={()=>this.onClick('status', 1)}><a href='/' role="button">Trạng Thái Kích Hoạt</a></li>
+                        <li onClick={()=>this.onClick('name',-1)}><a href='/' role="button">Trạng Thái Ẩn</a></li>
                     </ul>
                 </div>   
             </div>

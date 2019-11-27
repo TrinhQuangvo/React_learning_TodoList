@@ -9,7 +9,12 @@ class App extends Component {
         this.state= {
             tasks :[],
             isDisplayForm:false,
-            taskEditing:null
+            taskEditing:null,
+            filter:{filterName:'',filterStatus:-1},
+            keyword:'',
+            sort:{
+                by:'',value:1
+            }
         }
     }
     onGenerateData = () =>{
@@ -102,7 +107,7 @@ class App extends Component {
     onUpdate = (id) =>{
         var {tasks} = this.state;
         var index = this.findIndex(id);
-        let taskEditing = tasks[index]
+        var taskEditing = tasks[index]
         //console.log(taskEditing)
         this.setState({
             //lấy task đang cập nhật
@@ -110,9 +115,35 @@ class App extends Component {
         });
         this.onShowForm();
     }
+    onFilter = (filterName,filterStatus)=>{
+        console.log(filterName + ' ' + filterStatus)
+        filterStatus = parseInt(filterStatus,10);
+        this.setState({
+            filter : {
+                name: filterName,
+                status: filterStatus
+            }
+        })
+    }
   render(){
     //var tasks = this.state.tasks
-    var {tasks ,isDisplayForm , taskEditing} = this.state;
+    var {tasks ,isDisplayForm , taskEditing , filter} = this.state;
+   
+    if(filter){
+        if(filter.name){
+        tasks = tasks.filter( (task) =>{
+            console.log('wtf is ' + task.name)
+            return task.name.toLowerCase().indexOf(filter.name) !== -1
+        })
+    }
+        tasks = tasks.filter(task =>{
+            if(filter.status === -1){
+                return task;
+            }else{
+                return task.status === (filter.status === 1 ? true : false) 
+            }
+        })
+    }
     var elmTaskForm = isDisplayForm ? 
         <TaskForm 
             key={this.state.id} 
@@ -133,12 +164,14 @@ class App extends Component {
             <div className={isDisplayForm ?'col-xs-8 col-sm-8 col-md-8 col-lg-8' : 'col-xs-12 col-sm-12 col-md-12 col-lg-12'}>
                 <button onClick={this.onToggleForm} type="button" className="btn btn-primary"> <span className="fa fa-plus"></span>Thêm Công Việc</button>
                 {/* <button type="button" onClick={this.onGenerateData} className="btn btn-danger ml-2"> <span className="fa fa-plus"></span>Generate Data</button> */}
-                  <Control/>
+                  <Control keyword={this.state.keyword}/>
                 <TaskList 
                 onUpdateStatus={this.onUpdateStatus} 
                 tasks={tasks}
                 onDeleteItem = {this.onDeleteItem}
-                onUpdate = {this.onUpdate} />   
+                onUpdate = {this.onUpdate} 
+                onFilter = {this.onFilter}
+                />   
             </div>
         </div>
     </div>
